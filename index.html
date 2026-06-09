@@ -14,10 +14,8 @@
   :root {
     --green: #16a34a;
     --green-light: #dcfce7;
-    --green-dark: #14532d;
     --orange: #ea580c;
     --orange-light: #ffedd5;
-    --orange-dark: #7c2d12;
     --red: #dc2626;
     --red-light: #fee2e2;
     --red-dark: #7f1d1d;
@@ -29,7 +27,6 @@
     --gray-400: #9ca3af;
     --gray-600: #4b5563;
     --gray-800: #1f2937;
-    --white: #ffffff;
     --radius: 10px;
     --shadow: 0 1px 3px rgba(0,0,0,0.1);
   }
@@ -52,16 +49,28 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   }
 
-  header h1 {
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: -0.3px;
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
-  header .subtitle {
+  header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+  header .subtitle { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+
+  .wa-knop {
+    background: rgba(255,255,255,0.2);
+    border: 1.5px solid rgba(255,255,255,0.4);
+    color: white;
+    border-radius: 20px;
+    padding: 7px 14px;
     font-size: 13px;
-    opacity: 0.8;
-    margin-top: 2px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
   }
 
   .datum-selector {
@@ -95,11 +104,7 @@
     transition: all 0.15s;
   }
 
-  .datum-chip.active {
-    background: var(--blue);
-    border-color: var(--blue);
-    color: white;
-  }
+  .datum-chip.active { background: var(--blue); border-color: var(--blue); color: white; }
 
   .datum-chip.add-datum {
     border-style: dashed;
@@ -116,28 +121,9 @@
     border-bottom: 1px solid var(--gray-200);
   }
 
-  .stat {
-    flex: 1;
-    text-align: center;
-    padding: 8px 4px;
-    border-radius: 8px;
-    background: var(--gray-50);
-  }
-
-  .stat .getal {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 1;
-  }
-
-  .stat .label {
-    font-size: 11px;
-    color: var(--gray-400);
-    margin-top: 3px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
+  .stat { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; background: var(--gray-50); }
+  .stat .getal { font-size: 20px; font-weight: 600; line-height: 1; }
+  .stat .label { font-size: 11px; color: var(--gray-400); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
   .stat.aanwezig .getal { color: var(--green); }
   .stat.half .getal { color: var(--orange); }
   .stat.afwezig .getal { color: var(--red); }
@@ -159,23 +145,18 @@
     box-shadow: var(--shadow);
     overflow: hidden;
     min-height: 52px;
-    transition: opacity 0.2s;
   }
 
   .lid-naam {
     flex: 1;
     font-size: 14px;
     font-weight: 500;
-    letter-spacing: -0.1px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .knoppen {
-    display: flex;
-    flex-shrink: 0;
-  }
+  .knoppen { display: flex; flex-shrink: 0; }
 
   .knop {
     width: 52px;
@@ -191,50 +172,17 @@
     color: var(--gray-400);
     background: white;
     border-left: 1px solid var(--gray-100);
-    position: relative;
   }
 
   .knop:active { transform: scale(0.92); }
+  .knop.actief-2 { background: var(--green); color: white; }
+  .knop.actief-1 { background: var(--orange); color: white; }
+  .knop.actief-a { background: var(--red); color: white; }
 
-  .knop.actief-2 {
-    background: var(--green);
-    color: white;
-  }
-
-  .knop.actief-1 {
-    background: var(--orange);
-    color: white;
-  }
-
-  .knop.actief-a {
-    background: var(--red);
-    color: white;
-  }
-
-  .saving-indicator {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: white;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .saving-indicator.zichtbaar { opacity: 1; }
-
-  .laden {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--gray-400);
-    font-size: 14px;
-  }
+  .laden { text-align: center; padding: 3rem 1rem; color: var(--gray-400); font-size: 14px; }
 
   .spinner {
-    width: 32px;
-    height: 32px;
+    width: 32px; height: 32px;
     border: 3px solid var(--gray-200);
     border-top-color: var(--blue);
     border-radius: 50%;
@@ -276,11 +224,7 @@
     max-width: 480px;
   }
 
-  .modal h2 {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
+  .modal h2 { font-size: 17px; font-weight: 600; margin-bottom: 1rem; }
 
   .modal input[type="date"] {
     width: 100%;
@@ -292,30 +236,17 @@
     color: var(--gray-800);
   }
 
-  .modal-knoppen {
-    display: flex;
-    gap: 0.75rem;
-  }
+  .modal-knoppen { display: flex; gap: 0.75rem; }
 
   .modal-knoppen button {
-    flex: 1;
-    padding: 0.75rem;
+    flex: 1; padding: 0.75rem;
     border-radius: var(--radius);
-    font-size: 15px;
-    font-weight: 600;
-    border: none;
-    cursor: pointer;
+    font-size: 15px; font-weight: 600;
+    border: none; cursor: pointer;
   }
 
-  .btn-annuleer {
-    background: var(--gray-100);
-    color: var(--gray-600);
-  }
-
-  .btn-bevestig {
-    background: var(--blue);
-    color: white;
-  }
+  .btn-annuleer { background: var(--gray-100); color: var(--gray-600); }
+  .btn-bevestig { background: var(--blue); color: white; }
 
   .opslaan-status {
     position: fixed;
@@ -334,17 +265,10 @@
     pointer-events: none;
   }
 
-  .opslaan-status.zichtbaar {
-    transform: translateX(-50%) translateY(0);
-  }
+  .opslaan-status.zichtbaar { transform: translateX(-50%) translateY(0); }
+  .opslaan-status.fout { background: var(--red); }
 
-  .opslaan-status.fout {
-    background: var(--red);
-  }
-
-  .filter-bar {
-    padding: 0.5rem 1rem 0;
-  }
+  .filter-bar { padding: 0.5rem 1rem 0; }
 
   .filter-bar input {
     width: 100%;
@@ -357,20 +281,18 @@
     outline: none;
   }
 
-  .filter-bar input:focus {
-    border-color: var(--blue);
-  }
+  .filter-bar input:focus { border-color: var(--blue); }
 </style>
 </head>
 <body>
 
 <header>
-  <div style="display:flex; align-items:center; justify-content:space-between;">
+  <div class="header-inner">
     <div>
       <h1>Aanwezigheden</h1>
       <div class="subtitle" id="header-subtitle">Laden...</div>
     </div>
-    <button onclick="deelViaWhatsApp()" style="background:rgba(255,255,255,0.2); border:1.5px solid rgba(255,255,255,0.4); color:white; border-radius:20px; padding:7px 14px; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:6px; flex-shrink:0;">
+    <button class="wa-knop" onclick="deelViaWhatsApp()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.154 1.535 5.915L0 24l6.29-1.507A11.953 11.953 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.498-5.2-1.371l-.374-.217-3.853.923.978-3.762-.239-.386A9.959 9.959 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
       Delen
     </button>
@@ -421,18 +343,19 @@
 <div class="opslaan-status" id="opslaan-status"></div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxg74_w_37b1SHa_vLpA9Eya9_MzJl-K_-DsXUWJ6XLUxs0n0RwPhit_eZtcwc4mgE/exec';
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxg74_w_37b1SHa_vLpA9Eya9_MzJl-K_-DsXUWJ6XLUxs0n0RwPhit_eZtcwc4mgE/exec';
 
-let data = { datums: [], leden: [] };
-let activeDatum = null;
-let wachtrij = {};
-let saveTimer = null;
+var data = { datums: [], leden: [] };
+var activeDatum = null;
+var wachtrij = {};
+var saveTimer = null;
 
 async function laadData() {
   try {
-    const resp = await fetch(SCRIPT_URL);
+    var resp = await fetch(SCRIPT_URL, { redirect: 'follow' });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    data = await resp.json();
+    var tekst = await resp.text();
+    data = JSON.parse(tekst);
     if (data.datums && data.datums.length > 0) {
       activeDatum = String(data.datums[data.datums.length - 1]);
     }
@@ -440,39 +363,38 @@ async function laadData() {
     renderLeden();
     document.getElementById('stats-bar').style.display = 'flex';
   } catch (e) {
-    toonFout('Kan gegevens niet laden. Controleer je verbinding.');
+    toonFout('Fout: ' + e.message);
     document.getElementById('leden-lijst').innerHTML = '';
   }
 }
 
 function renderDatums() {
-  const container = document.getElementById('datum-selector');
+  var container = document.getElementById('datum-selector');
   container.innerHTML = '';
-  data.datums.forEach(d => {
-    const chip = document.createElement('div');
+  data.datums.slice().reverse().forEach(function(d) {
+    var chip = document.createElement('div');
     chip.className = 'datum-chip' + (String(d) === activeDatum ? ' active' : '');
     chip.textContent = String(d);
-    chip.onclick = () => { activeDatum = String(d); renderDatums(); renderLeden(); };
+    chip.onclick = function() { activeDatum = String(d); renderDatums(); renderLeden(); };
     container.appendChild(chip);
   });
-  const add = document.createElement('div');
+  var add = document.createElement('div');
   add.className = 'datum-chip add-datum';
   add.textContent = '+ Dag toevoegen';
   add.onclick = openModal;
   container.appendChild(add);
 
-  const subtitle = document.getElementById('header-subtitle');
-  subtitle.textContent = activeDatum ? 'Training ' + activeDatum : 'Geen data';
+  document.getElementById('header-subtitle').textContent = activeDatum ? 'Training ' + activeDatum : 'Geen data';
 }
 
 function gefilterdeleden() {
-  const q = document.getElementById('zoek').value.toLowerCase();
-  return data.leden.filter(l => !q || l.naam.toLowerCase().includes(q));
+  var q = document.getElementById('zoek').value.toLowerCase();
+  return data.leden.filter(function(l) { return !q || l.naam.toLowerCase().includes(q); });
 }
 
 function renderLeden() {
-  const lijst = document.getElementById('leden-lijst');
-  const leden = gefilterdeleden();
+  var lijst = document.getElementById('leden-lijst');
+  var leden = gefilterdeleden();
 
   if (!activeDatum || leden.length === 0) {
     lijst.innerHTML = '<div class="laden" style="padding:2rem">Geen leden gevonden.</div>';
@@ -481,19 +403,18 @@ function renderLeden() {
   }
 
   lijst.innerHTML = '';
-  leden.forEach(lid => {
-    const waarde = String(lid.aanwezigheden[activeDatum] || 'A');
-    const rij = document.createElement('div');
+  leden.forEach(function(lid) {
+    var waarde = String(lid.aanwezigheden[activeDatum] || 'A');
+    var rij = document.createElement('div');
     rij.className = 'lid-rij';
     rij.id = 'rij-' + lid.naam.replace(/\s+/g, '-');
-    rij.innerHTML = `
-      <div class="lid-naam">${lid.naam}</div>
-      <div class="knoppen">
-        <button class="knop ${waarde === '2' ? 'actief-2' : ''}" data-naam="${lid.naam}" data-waarde="2" onclick="zetWaarde(this)">2</button>
-        <button class="knop ${waarde === '1' ? 'actief-1' : ''}" data-naam="${lid.naam}" data-waarde="1" onclick="zetWaarde(this)">1</button>
-        <button class="knop ${waarde === 'A' ? 'actief-a' : ''}" data-naam="${lid.naam}" data-waarde="A" onclick="zetWaarde(this)">A</button>
-      </div>
-    `;
+    rij.innerHTML =
+      '<div class="lid-naam">' + lid.naam + '</div>' +
+      '<div class="knoppen">' +
+        '<button class="knop ' + (waarde === '2' ? 'actief-2' : '') + '" data-naam="' + lid.naam + '" data-waarde="2" onclick="zetWaarde(this)">2</button>' +
+        '<button class="knop ' + (waarde === '1' ? 'actief-1' : '') + '" data-naam="' + lid.naam + '" data-waarde="1" onclick="zetWaarde(this)">1</button>' +
+        '<button class="knop ' + (waarde === 'A' ? 'actief-a' : '') + '" data-naam="' + lid.naam + '" data-waarde="A" onclick="zetWaarde(this)">A</button>' +
+      '</div>';
     lijst.appendChild(rij);
   });
 
@@ -501,9 +422,9 @@ function renderLeden() {
 }
 
 function updateStats(leden) {
-  let c2 = 0, c1 = 0, cA = 0;
-  leden.forEach(l => {
-    const w = String(l.aanwezigheden[activeDatum] || 'A');
+  var c2 = 0, c1 = 0, cA = 0;
+  leden.forEach(function(l) {
+    var w = String(l.aanwezigheden[activeDatum] || 'A');
     if (w === '2') c2++;
     else if (w === '1') c1++;
     else cA++;
@@ -514,15 +435,15 @@ function updateStats(leden) {
 }
 
 function zetWaarde(knop) {
-  const naam = knop.dataset.naam;
-  const waarde = knop.dataset.waarde;
-  const lid = data.leden.find(l => l.naam === naam);
+  var naam = knop.dataset.naam;
+  var waarde = knop.dataset.waarde;
+  var lid = data.leden.find(function(l) { return l.naam === naam; });
   if (!lid) return;
 
   lid.aanwezigheden[activeDatum] = waarde;
 
-  const rij = document.getElementById('rij-' + naam.replace(/\s+/g, '-'));
-  rij.querySelectorAll('.knop').forEach(k => {
+  var rij = document.getElementById('rij-' + naam.replace(/\s+/g, '-'));
+  rij.querySelectorAll('.knop').forEach(function(k) {
     k.classList.remove('actief-2', 'actief-1', 'actief-a');
   });
   if (waarde === '2') knop.classList.add('actief-2');
@@ -531,36 +452,33 @@ function zetWaarde(knop) {
 
   updateStats(gefilterdeleden());
 
-  wachtrij[naam + '|' + activeDatum] = { naam, datum: activeDatum, waarde };
+  wachtrij[naam + '|' + activeDatum] = { naam: naam, datum: activeDatum, waarde: waarde };
   clearTimeout(saveTimer);
   saveTimer = setTimeout(slaWachtrij, 800);
 }
 
 async function slaWachtrij() {
-  const items = Object.values(wachtrij);
+  var items = Object.values(wachtrij);
   wachtrij = {};
   if (items.length === 0) return;
 
   toonStatus('Opslaan...');
 
-  const resultaten = await Promise.all(items.map(item =>
-    fetch(SCRIPT_URL, {
+  var resultaten = await Promise.all(items.map(function(item) {
+    return fetch(SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify(item)
-    }).then(r => r.json()).catch(() => ({ success: false }))
-  ));
+    }).then(function(r) { return r.json(); }).catch(function() { return { success: false }; });
+  }));
 
-  const allesOk = resultaten.every(r => r.success);
-  if (allesOk) {
-    toonStatus('✓ Opgeslagen');
-  } else {
-    toonStatus('Fout bij opslaan', true);
-  }
+  var allesOk = resultaten.every(function(r) { return r.success; });
+  if (allesOk) toonStatus('Opgeslagen');
+  else toonStatus('Fout bij opslaan', true);
 }
 
 function openModal() {
-  const input = document.getElementById('nieuwe-datum-input');
-  const nu = new Date();
+  var input = document.getElementById('nieuwe-datum-input');
+  var nu = new Date();
   input.value = nu.toISOString().split('T')[0];
   document.getElementById('modal-overlay').classList.add('zichtbaar');
 }
@@ -570,24 +488,24 @@ function sluitModal() {
 }
 
 async function bevestigNieuweDatum() {
-  const input = document.getElementById('nieuwe-datum-input');
-  const val = input.value;
+  var input = document.getElementById('nieuwe-datum-input');
+  var val = input.value;
   if (!val) return;
 
-  const [jaar, maand, dag] = val.split('-');
-  const datumStr = `${parseInt(dag)}/${parseInt(maand)}/${jaar}`;
+  var delen = val.split('-');
+  var datumStr = parseInt(delen[2]) + '/' + parseInt(delen[1]) + '/' + delen[0];
 
   sluitModal();
   toonStatus('Dag toevoegen...');
 
   try {
-    const resp = await fetch(SCRIPT_URL, {
+    var resp = await fetch(SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify({ actie: 'nieuweDatum', datum: datumStr })
     });
-    const result = await resp.json();
+    var result = await resp.json();
     if (result.success) {
-      toonStatus('✓ Trainingsdag toegevoegd');
+      toonStatus('Trainingsdag toegevoegd');
       await laadData();
       activeDatum = datumStr;
       renderDatums();
@@ -600,76 +518,56 @@ async function bevestigNieuweDatum() {
   }
 }
 
-let statusTimer;
-function toonStatus(tekst, fout = false) {
-  const el = document.getElementById('opslaan-status');
+var statusTimer;
+function toonStatus(tekst, fout) {
+  var el = document.getElementById('opslaan-status');
   el.textContent = tekst;
   el.className = 'opslaan-status zichtbaar' + (fout ? ' fout' : '');
   clearTimeout(statusTimer);
-  statusTimer = setTimeout(() => { el.classList.remove('zichtbaar'); }, 2200);
+  statusTimer = setTimeout(function() { el.classList.remove('zichtbaar'); }, 2200);
 }
 
 function toonFout(tekst) {
-  const el = document.getElementById('fout-banner');
+  var el = document.getElementById('fout-banner');
   el.textContent = tekst;
   el.classList.add('zichtbaar');
 }
 
+function deelViaWhatsApp() {
+  if (!activeDatum || !data.leden.length) return;
+
+  var aanwezig = [];
+  var half = [];
+
+  data.leden.forEach(function(lid) {
+    var w = String(lid.aanwezigheden[activeDatum] || 'A');
+    if (w === '2') aanwezig.push(lid.naam);
+    else if (w === '1') half.push(lid.naam);
+  });
+
+  var bericht = 'Aanwezigheden ' + activeDatum + '\n\n';
+  bericht += aanwezig.length + ' aanwezig (2pt) | ' + half.length + ' aanwezig (1pt)\n\n';
+
+  if (aanwezig.length) {
+    bericht += 'Aanwezig (2pt)\n';
+    aanwezig.forEach(function(n) { bericht += '- ' + n + '\n'; });
+    bericht += '\n';
+  }
+  if (half.length) {
+    bericht += 'Aanwezig (1pt)\n';
+    half.forEach(function(n) { bericht += '- ' + n + '\n'; });
+  }
+
+  var url = 'https://wa.me/?text=' + encodeURIComponent(bericht);
+  window.open(url, '_blank');
+}
+
 document.getElementById('zoek').addEventListener('input', renderLeden);
-document.getElementById('modal-overlay').addEventListener('click', e => {
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
   if (e.target === e.currentTarget) sluitModal();
 });
 
 laadData();
-
-function deelViaWhatsApp() {
-  if (!activeDatum || !data.leden.length) return;
-
-  const aanwezig = [];
-  const half = [];
-  const afwezig = [];
-
-  data.leden.forEach(lid => {
-    const w = String(lid.aanwezigheden[activeDatum] || 'A');
-    if (w === '2') aanwezig.push(lid.naam);
-    else if (w === '1') half.push(lid.naam);
-    else afwezig.push(lid.naam);
-  });
-
-  let bericht = `✅ *Aanwezigheden ${activeDatum}*
-
-`;
-  bericht += `📊 ${aanwezig.length} aanwezig | ${half.length} half | ${afwezig.length} afwezig
-
-`;
-
-  if (aanwezig.length) {
-    bericht += `*✅ Aanwezig (2pt)*
-`;
-    aanwezig.forEach(n => bericht += `• ${n}
-`);
-    bericht += '
-';
-  }
-  if (half.length) {
-    bericht += `*🟠 Half aanwezig (1pt)*
-`;
-    half.forEach(n => bericht += `• ${n}
-`);
-    bericht += '
-';
-  }
-  if (afwezig.length) {
-    bericht += `*❌ Afwezig*
-`;
-    afwezig.forEach(n => bericht += `• ${n}
-`);
-  }
-
-  const url = 'https://wa.me/?text=' + encodeURIComponent(bericht);
-  window.open(url, '_blank');
-}
-
 </script>
 </body>
 </html>
