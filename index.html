@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Aanwezigheden">
+<meta name="theme-color" content="#1a56db">
+<title>Aanwezigheden</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --green-dark: #14532d;
+    --orange: #ea580c;
+    --orange-light: #ffedd5;
+    --orange-dark: #7c2d12;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --red-dark: #7f1d1d;
+    --blue: #1a56db;
+    --blue-light: #eff6ff;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-400: #9ca3af;
+    --gray-600: #4b5563;
+    --gray-800: #1f2937;
+    --white: #ffffff;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--gray-100);
+    color: var(--gray-800);
+    min-height: 100vh;
+    padding-bottom: 2rem;
+  }
+
+  header {
+    background: var(--blue);
+    color: white;
+    padding: 1rem 1.25rem 0.75rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  header .subtitle {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 2px;
+  }
+
+  .datum-selector {
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    position: sticky;
+    top: 72px;
+    z-index: 99;
+  }
+
+  .datum-selector::-webkit-scrollbar { display: none; }
+
+  .datum-chip {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1.5px solid var(--gray-200);
+    background: var(--gray-50);
+    color: var(--gray-600);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+
+  .datum-chip.active {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: white;
+  }
+
+  .datum-chip.add-datum {
+    border-style: dashed;
+    color: var(--blue);
+    border-color: var(--blue);
+    background: var(--blue-light);
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 8px;
+    padding: 0.75rem 1.25rem;
+    background: white;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .stat {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    border-radius: 8px;
+    background: var(--gray-50);
+  }
+
+  .stat .getal {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .stat .label {
+    font-size: 11px;
+    color: var(--gray-400);
+    margin-top: 3px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .stat.aanwezig .getal { color: var(--green); }
+  .stat.half .getal { color: var(--orange); }
+  .stat.afwezig .getal { color: var(--red); }
+
+  .leden-lijst {
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .lid-rij {
+    background: white;
+    border-radius: var(--radius);
+    padding: 0 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    min-height: 52px;
+    transition: opacity 0.2s;
+  }
+
+  .lid-naam {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .knoppen {
+    display: flex;
+    flex-shrink: 0;
+  }
+
+  .knop {
+    width: 52px;
+    height: 52px;
+    border: none;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s;
+    color: var(--gray-400);
+    background: white;
+    border-left: 1px solid var(--gray-100);
+    position: relative;
+  }
+
+  .knop:active { transform: scale(0.92); }
+
+  .knop.actief-2 {
+    background: var(--green);
+    color: white;
+  }
+
+  .knop.actief-1 {
+    background: var(--orange);
+    color: white;
+  }
+
+  .knop.actief-a {
+    background: var(--red);
+    color: white;
+  }
+
+  .saving-indicator {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .saving-indicator.zichtbaar { opacity: 1; }
+
+  .laden {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--gray-400);
+    font-size: 14px;
+  }
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin: 0 auto 1rem;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .fout-banner {
+    margin: 0.75rem 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--red-light);
+    color: var(--red-dark);
+    border-radius: var(--radius);
+    font-size: 13px;
+    display: none;
+  }
+
+  .fout-banner.zichtbaar { display: block; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .modal-overlay.zichtbaar { display: flex; }
+
+  .modal {
+    background: white;
+    border-radius: 16px 16px 0 0;
+    padding: 1.5rem 1.25rem 2rem;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .modal h2 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .modal input[type="date"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-size: 16px;
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+  }
+
+  .modal-knoppen {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .modal-knoppen button {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-annuleer {
+    background: var(--gray-100);
+    color: var(--gray-600);
+  }
+
+  .btn-bevestig {
+    background: var(--blue);
+    color: white;
+  }
+
+  .opslaan-status {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--gray-800);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 300;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .opslaan-status.zichtbaar {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .opslaan-status.fout {
+    background: var(--red);
+  }
+
+  .filter-bar {
+    padding: 0.5rem 1rem 0;
+  }
+
+  .filter-bar input {
+    width: 100%;
+    padding: 9px 14px 9px 36px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 20px;
+    font-size: 14px;
+    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E") no-repeat 12px center;
+    color: var(--gray-800);
+    outline: none;
+  }
+
+  .filter-bar input:focus {
+    border-color: var(--blue);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Aanwezigheden</h1>
+  <div class="subtitle" id="header-subtitle">Laden...</div>
+</header>
+
+<div class="datum-selector" id="datum-selector"></div>
+
+<div class="stats-bar" id="stats-bar" style="display:none">
+  <div class="stat aanwezig">
+    <div class="getal" id="stat-2">0</div>
+    <div class="label">Aanwezig</div>
+  </div>
+  <div class="stat half">
+    <div class="getal" id="stat-1">0</div>
+    <div class="label">Half</div>
+  </div>
+  <div class="stat afwezig">
+    <div class="getal" id="stat-a">0</div>
+    <div class="label">Afwezig</div>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <input type="text" id="zoek" placeholder="Zoek lid..." autocomplete="off" autocorrect="off" spellcheck="false">
+</div>
+
+<div class="fout-banner" id="fout-banner"></div>
+
+<div class="leden-lijst" id="leden-lijst">
+  <div class="laden">
+    <div class="spinner"></div>
+    Gegevens ophalen...
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2>Nieuwe trainingsdag</h2>
+    <input type="date" id="nieuwe-datum-input">
+    <div class="modal-knoppen">
+      <button class="btn-annuleer" onclick="sluitModal()">Annuleer</button>
+      <button class="btn-bevestig" onclick="bevestigNieuweDatum()">Toevoegen</button>
+    </div>
+  </div>
+</div>
+
+<div class="opslaan-status" id="opslaan-status"></div>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxr29lzlCS6it2yLMbkn_AwwjWRz5FQCk_cf403-dsn9qeAxl1yuIcTHZTn3YXYUuywSg/exec';
+
+let data = { datums: [], leden: [] };
+let activeDatum = null;
+let wachtrij = {};
+let saveTimer = null;
+
+async function laadData() {
+  try {
+    const resp = await fetch(SCRIPT_URL);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    data = await resp.json();
+    if (data.datums && data.datums.length > 0) {
+      activeDatum = String(data.datums[data.datums.length - 1]);
+    }
+    renderDatums();
+    renderLeden();
+    document.getElementById('stats-bar').style.display = 'flex';
+  } catch (e) {
+    toonFout('Kan gegevens niet laden. Controleer je verbinding.');
+    document.getElementById('leden-lijst').innerHTML = '';
+  }
+}
+
+function renderDatums() {
+  const container = document.getElementById('datum-selector');
+  container.innerHTML = '';
+  data.datums.forEach(d => {
+    const chip = document.createElement('div');
+    chip.className = 'datum-chip' + (String(d) === activeDatum ? ' active' : '');
+    chip.textContent = String(d);
+    chip.onclick = () => { activeDatum = String(d); renderDatums(); renderLeden(); };
+    container.appendChild(chip);
+  });
+  const add = document.createElement('div');
+  add.className = 'datum-chip add-datum';
+  add.textContent = '+ Dag toevoegen';
+  add.onclick = openModal;
+  container.appendChild(add);
+
+  const subtitle = document.getElementById('header-subtitle');
+  subtitle.textContent = activeDatum ? 'Training ' + activeDatum : 'Geen data';
+}
+
+function gefilterdeleden() {
+  const q = document.getElementById('zoek').value.toLowerCase();
+  return data.leden.filter(l => !q || l.naam.toLowerCase().includes(q));
+}
+
+function renderLeden() {
+  const lijst = document.getElementById('leden-lijst');
+  const leden = gefilterdeleden();
+
+  if (!activeDatum || leden.length === 0) {
+    lijst.innerHTML = '<div class="laden" style="padding:2rem">Geen leden gevonden.</div>';
+    updateStats([]);
+    return;
+  }
+
+  lijst.innerHTML = '';
+  leden.forEach(lid => {
+    const waarde = String(lid.aanwezigheden[activeDatum] || 'A');
+    const rij = document.createElement('div');
+    rij.className = 'lid-rij';
+    rij.id = 'rij-' + lid.naam.replace(/\s+/g, '-');
+    rij.innerHTML = `
+      <div class="lid-naam">${lid.naam}</div>
+      <div class="knoppen">
+        <button class="knop ${waarde === '2' ? 'actief-2' : ''}" data-naam="${lid.naam}" data-waarde="2" onclick="zetWaarde(this)">2</button>
+        <button class="knop ${waarde === '1' ? 'actief-1' : ''}" data-naam="${lid.naam}" data-waarde="1" onclick="zetWaarde(this)">1</button>
+        <button class="knop ${waarde === 'A' ? 'actief-a' : ''}" data-naam="${lid.naam}" data-waarde="A" onclick="zetWaarde(this)">A</button>
+      </div>
+    `;
+    lijst.appendChild(rij);
+  });
+
+  updateStats(leden);
+}
+
+function updateStats(leden) {
+  let c2 = 0, c1 = 0, cA = 0;
+  leden.forEach(l => {
+    const w = String(l.aanwezigheden[activeDatum] || 'A');
+    if (w === '2') c2++;
+    else if (w === '1') c1++;
+    else cA++;
+  });
+  document.getElementById('stat-2').textContent = c2;
+  document.getElementById('stat-1').textContent = c1;
+  document.getElementById('stat-a').textContent = cA;
+}
+
+function zetWaarde(knop) {
+  const naam = knop.dataset.naam;
+  const waarde = knop.dataset.waarde;
+  const lid = data.leden.find(l => l.naam === naam);
+  if (!lid) return;
+
+  lid.aanwezigheden[activeDatum] = waarde;
+
+  const rij = document.getElementById('rij-' + naam.replace(/\s+/g, '-'));
+  rij.querySelectorAll('.knop').forEach(k => {
+    k.classList.remove('actief-2', 'actief-1', 'actief-a');
+  });
+  if (waarde === '2') knop.classList.add('actief-2');
+  else if (waarde === '1') knop.classList.add('actief-1');
+  else knop.classList.add('actief-a');
+
+  updateStats(gefilterdeleden());
+
+  wachtrij[naam + '|' + activeDatum] = { naam, datum: activeDatum, waarde };
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(slaWachtrij, 800);
+}
+
+async function slaWachtrij() {
+  const items = Object.values(wachtrij);
+  wachtrij = {};
+  if (items.length === 0) return;
+
+  toonStatus('Opslaan...');
+
+  const resultaten = await Promise.all(items.map(item =>
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(item)
+    }).then(r => r.json()).catch(() => ({ success: false }))
+  ));
+
+  const allesOk = resultaten.every(r => r.success);
+  if (allesOk) {
+    toonStatus('✓ Opgeslagen');
+  } else {
+    toonStatus('Fout bij opslaan', true);
+  }
+}
+
+function openModal() {
+  const input = document.getElementById('nieuwe-datum-input');
+  const nu = new Date();
+  input.value = nu.toISOString().split('T')[0];
+  document.getElementById('modal-overlay').classList.add('zichtbaar');
+}
+
+function sluitModal() {
+  document.getElementById('modal-overlay').classList.remove('zichtbaar');
+}
+
+async function bevestigNieuweDatum() {
+  const input = document.getElementById('nieuwe-datum-input');
+  const val = input.value;
+  if (!val) return;
+
+  const [jaar, maand, dag] = val.split('-');
+  const datumStr = `${parseInt(dag)}/${parseInt(maand)}/${jaar}`;
+
+  sluitModal();
+  toonStatus('Dag toevoegen...');
+
+  try {
+    const resp = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({ actie: 'nieuweDatum', datum: datumStr })
+    });
+    const result = await resp.json();
+    if (result.success) {
+      toonStatus('✓ Trainingsdag toegevoegd');
+      await laadData();
+      activeDatum = datumStr;
+      renderDatums();
+      renderLeden();
+    } else {
+      toonStatus(result.error || 'Fout bij toevoegen', true);
+    }
+  } catch (e) {
+    toonStatus('Verbindingsfout', true);
+  }
+}
+
+let statusTimer;
+function toonStatus(tekst, fout = false) {
+  const el = document.getElementById('opslaan-status');
+  el.textContent = tekst;
+  el.className = 'opslaan-status zichtbaar' + (fout ? ' fout' : '');
+  clearTimeout(statusTimer);
+  statusTimer = setTimeout(() => { el.classList.remove('zichtbaar'); }, 2200);
+}
+
+function toonFout(tekst) {
+  const el = document.getElementById('fout-banner');
+  el.textContent = tekst;
+  el.classList.add('zichtbaar');
+}
+
+document.getElementById('zoek').addEventListener('input', renderLeden);
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === e.currentTarget) sluitModal();
+});
+
+laadData();
+</script>
+</body>
+</html>
