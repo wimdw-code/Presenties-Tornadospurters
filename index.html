@@ -382,7 +382,7 @@ function renderDatums() {
   add.className = 'datum-chip add-datum';
   add.textContent = '+ Dag toevoegen';
   add.onclick = openModal;
-  container.appendChild(add);
+  container.insertBefore(add, container.firstChild);
 
   document.getElementById('header-subtitle').textContent = activeDatum ? 'Training ' + activeDatum : 'Geen data';
 }
